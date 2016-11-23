@@ -8,11 +8,12 @@ class EveRestFactory
 {
     /**
      * @param string $resource
+     * @param EveRest $eveRest
      * @return Resource
      */
-    public static function makeFactory($resource)
+    public static function makeFactory($resource, EveRest $eveRest)
     {
         return (new ReflectionClass('EveRest\\Resource\\' . ucfirst($resource)))
-            ->newInstance(array_slice(func_get_args(), 2));
+            ->newInstance($eveRest, array_slice(func_get_args(), 2));
     }
 }

@@ -20,16 +20,15 @@ final class Auth extends Resource
     }
 
     /**
-     * @param string $client_id
-     * @param string $client_secret
      * @param string $refresh_token
      * @return string
      */
-    public function refreshToken($client_id, $client_secret, $refresh_token)
+    public function refreshToken($refresh_token)
     {
         return $this->request('POST', $this->buildResourceUri() .
             '/token/?grant_type=refresh_token&refresh_token=' . $refresh_token, null, [
-            'Authorization' => 'Basic ' . base64_encode($client_id . ':' . $client_secret)
+            'Authorization' => 'Basic ' . base64_encode(
+                $this->getEveRest()->getClientId() . ':' . $this->getEveRest()->getClientSecret())
         ]);
     }
 }

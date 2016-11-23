@@ -1,6 +1,7 @@
 <?php
 namespace EveRest\Resource;
 
+use EveRest\EveRest;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
@@ -19,16 +20,23 @@ abstract class Resource
     protected $base_uri;
 
     /**
+     * @var EveRest
+     */
+    protected $eveRest;
+
+    /**
      * @var array
      */
     protected $arguments = [];
 
     /**
+     * @param EveRest $eveRest
      * @param array $arguments
      */
-    public function __construct(array $arguments)
+    public function __construct(EveRest $eveRest, array $arguments)
     {
         $this->guzzleClient = new Client();
+        $this->eveRest = $eveRest;
         $this->arguments = $arguments;
     }
 
@@ -78,6 +86,8 @@ abstract class Resource
     protected function parseExceptionResponse(RequestException $exception)
     {
         if ($exception->hasResponse()) {
+            var_dump($exception->getResponse()->getBody()->getContents());
+            exit;
             return false;
         }
     }
@@ -98,5 +108,13 @@ abstract class Resource
     protected function getHeaders(array $headers = null)
     {
         return is_null($headers) ? [] : $headers;
+    }
+
+    /**
+     * @return EveRest
+     */
+    protected function getEveRest()
+    {
+        return $this->eveRest;
     }
 }
